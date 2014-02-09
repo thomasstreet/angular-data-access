@@ -20,6 +20,10 @@ angular.module('angularDataAccessApp', [
         templateUrl: 'views/simple-good-example.html',
         controller: 'SimpleGoodExampleCtrl'
       })
+      .when('/better-example', {
+        templateUrl: 'views/better-example.html',
+        controller: 'BetterExampleCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });

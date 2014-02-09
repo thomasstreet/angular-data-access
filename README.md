@@ -45,4 +45,14 @@ Does that look familiar?  This approach works on the quick, but it sure doesn't 
 
 Enter **Angular services.**  Services in Angular let you share logic between different modules in your code.  In this case, we can create a single service, which we can call `loading` and that we can load into as many different controllers as we need.
 
-See where this is going?  We can make `loading` perform our asynchronous requests in a single place
+I'm using Yeoman here (which is amazing,) so to create my loading service I'm just going to run `yo angular:factory loading` at the command-line and Yeoman will create my boiler-plate file for me, as well as load it into index.html.  If you haven't set up Yeoman, you can just create the file manually and include the script in index.html yourself.
+
+I can now include this "loading" service by dependency-injecting it into my controller (that is, include "loading" as one of the parameters in my controller declaration)
+
+    angular.module('angularDataAccessApp')
+      //Dependency-inject my 'loading' service here
+      .controller('BetterExampleCtrl', function ($scope, loading) {
+        //TODO:  write some logic making use of 'loading'
+      });
+
+
