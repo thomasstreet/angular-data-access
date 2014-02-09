@@ -5,7 +5,7 @@ While building an AngularJS app with any sort of server access, you have probabl
 
 >  "Oh, I need to get this data from an HTTP API, so let me drop in an `$http.get` right here in my controller, write up a callback that binds the data to a variable in my `$scope` object, maybe wire up a variable to use as a loading indicator, and boom--my UI is updated and I'm happy with my life.  Oh, and I ~~probably won't~~ might write some error-handling logic for this at some point."
 
-Or more concretely, here's some code for a controller doing exactly that:
+Or more concretely, here's some code for a controller doing exactly that: (`app/scripts/controllers/bad-example.js`)
 
 
     angular.module('angularDataAccessApp')
@@ -27,7 +27,7 @@ Or more concretely, here's some code for a controller doing exactly that:
           })
       });
 
-And the corresponding view:
+And the corresponding view: (`app/views/bad-example.html`)
 
     <h2>San Francisco Street Names</h2>
     <ul>
@@ -41,6 +41,8 @@ And the corresponding view:
     </p>
 
 
-Does that look familiar?  This approach works on the quick, but it sure doesn't scale.  What about when you need to use that data in a different controller?  What about if you need to refactor your data sources to use different URIs or to follow a different schema?  This gets messy, and 'messy' isn't conducive to building quality software.  We need to organize this better.  Fortunately, AngularJS has tools we can leverage to this end.
+Does that look familiar?  This approach works on the quick, but it sure doesn't scale.  What about when you need to use that data in a different controller?  What about if you need to refactor your data sources to use different URIs or to follow a different schema?  As your application grows, this gets messy, and 'messy' isn't conducive to building quality software.  We need to organize this better.  Fortunately, AngularJS has tools we can leverage to this end.
 
-Enter an angular service.  Services in angular give you 
+Enter **Angular services.**  Services in Angular let you share logic between different modules in your code.  In this case, we can create a single service, which we can call `loading` and that we can load into as many different controllers as we need.
+
+See where this is going?  We can make `loading` perform our asynchronous requests in a single place
