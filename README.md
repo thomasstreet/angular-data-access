@@ -47,12 +47,19 @@ Enter **Angular services.**  Services in Angular let you share logic between dif
 
 I'm using Yeoman here (which is amazing,) so to create my loading service I'm just going to run `yo angular:factory loading` at the command-line and Yeoman will create my boiler-plate file for me, as well as load it into index.html.  If you haven't set up Yeoman, you can just create the file manually and include the script in index.html yourself.
 
-I can now include this "loading" service by dependency-injecting it into my controller (that is, include "loading" as one of the parameters in my controller declaration)
+We can now include this "loading" service by dependency-injecting it into our controller (that is, include "loading" as one of the parameters in the controller declaration)
 
     angular.module('angularDataAccessApp')
-      //Dependency-inject my 'loading' service here
+      //Dependency-inject the 'loading' service here
       .controller('BetterExampleCtrl', function ($scope, loading) {
         //TODO:  write some logic making use of 'loading'
       });
 
+
+Now what are we going to make loading do, exactly?  There are two roles I'd like it to fulfill.
+
+ 1. Primarily, load data asynchronously and do something sane with it (our goal, again, is nice, clean organization.)
+ 2. Secondarily, give us access to loading indicators so we can update our UI consistently
+
+Let's start with #1.  Let's load the data with a variant on the code we had in our bad-example controller.
 
