@@ -1,0 +1,7 @@
+<p  ng-hide="loading.isLoading('catFacts')"
+    ng-repeat="catFact in catFacts()">
+  {{catFact}}
+</p>
+<p  ng-show="loading.isLoading('catFacts')">
+  Cat facts are loading.
+</p>
