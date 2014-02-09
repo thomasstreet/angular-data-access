@@ -94,7 +94,7 @@ Let's start with #1.  Let's load the data with a variant on the code we had in o
 
 So if we call `loading.loadSFStreetNames()` from our controller, we're going to make the async request, but we need to have a way to bring that data back to our controller.
 
-We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage, so I'm going to spin up another service, `data`, with `yo angular:factory data` and then dependency-inject `data` into my `loading` service.
+We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage, so I'm going to spin up another service, `data`.  I'll run `yo angular:factory data` and then dependency-inject `data` into our `loading` service.
 
 
 
