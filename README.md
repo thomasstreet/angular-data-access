@@ -61,5 +61,41 @@ Now what are we going to make loading do, exactly?  There are two roles I'd like
  1. Primarily, load data asynchronously and do something sane with it (our goal, again, is nice, clean organization.)
  2. Secondarily, give us access to loading indicators so we can update our UI consistently
 
-Let's start with #1.  Let's load the data with a variant on the code we had in our bad-example controller.
+Let's start with #1.  Let's load the data with a variant on the code we had in our bad-example controller.  I'll add a "loadSFStreetNames" function to the loading service and plug in pretty much the same logic.  We still have to do something with that data once we have it, though.
+
+    angular.module('angularDataAccessApp')
+      .factory('loading', function () {
+
+        var loading = {
+          loadSFStreetNames: function(){
+            var uri = 'http://data.sfgov.org/resource/6d9h-4u5v.json'
+
+            var success = function(data, status, headers, config){
+              //We can't access scope directly anymore
+              //  $scope.streetNames = data;
+              //  $scope.streetNamesLoading = false;
+
+              //TODO:  We need to do something with this data!
+            };
+
+            var error = function(data, status, headers, config){
+              //TODO:  write some error-handling logic, maybe? 
+            };
+
+            $http.get(uri)
+              .success(success)
+              .error(error)
+          }
+        };
+
+        return loading;
+      });
+
+
+So if we call `loading.loadSFStreetNames()` from our controller, we're going to make the async request, but we need to have a way to bring that data back to our controller.
+
+We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage, so I'm going to spin up another service, `data`, with `yo angular:factory data` and then dependency-inject `data` into my `loading` service.
+
+
+
 
