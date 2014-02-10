@@ -45,6 +45,8 @@ And the corresponding view:
 </p>
 ```
 
+[Bad arch diagram]
+
 
 Does that look familiar?  This approach works on the quick, but it sure doesn't scale.  What about when you need to use that data in a different controller?  What about if you need to refactor your data sources to use different URIs or to follow a different schema?  As your application grows, this gets messy, and 'messy' isn't conducive to building quality software.  We need to organize this better.  Fortunately, AngularJS has tools we can leverage to this end.
 
@@ -199,12 +201,16 @@ And view:
 </p>
 ```
 
-Alright!  Our loading service is now almost fulfilling its roles:  it's faithfully fetching data and it's keeping a ledger of loading statuses--now we just need to manage getting that data the rest of the way back to our controller(s).  Time to add another player.
+Alright!  Our loading service is now almost done with its tasks:  it's faithfully fetching data and it's keeping a ledger of loading statuses--now we just need to manage getting that data the rest of the way back to our controller(s).  Time to add another player.
+
+[Arch diagram here]
 
 
 
 
 ###Building a `data` service to store our data
 
-We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage--there are times we may want to kick off loading data without immediately accessing it, and there are times when we won't need to load data asynchronously if we've already stored it once.  Since these are distinct purposes, I'm going to spin up another service, `data`.  I'll run `yo angular:factory data` and then dependency-inject `data` into our `loading` service.  `data` will be our data storage container, while `loading` is the workhorse that runs and fetches the data as well as keeping track of loading status.
+We could store the data in our `loading` service, but it's cleaner to separate the concerns of loading and storage--there are times we may want to kick off loading data without immediately accessing it, and there are times when we won't need to load data asynchronously if we've already stored it once.  Since these are distinct purposes, I'm going to spin up another service, `data`.  I'll run `yo angular:factory data` and then dependency-inject `data` into our `loading` service.  `data` will be our data storage container, while `loading` is the workhorse that runs and fetches the data as well as keeping track of loading status.
+
+[Arch diagram here]
 
