@@ -49,6 +49,8 @@ And the corresponding view:
 Does that look familiar?  This approach works on the quick, but it sure doesn't scale.  What about when you need to use that data in a different controller?  What about if you need to refactor your data sources to use different URIs or to follow a different schema?  As your application grows, this gets messy, and 'messy' isn't conducive to building quality software.  We need to organize this better.  Fortunately, AngularJS has tools we can leverage to this end.
 
 
+
+
 ###Building a `loading` service to fetch and track our data
 
 Enter **Angular services.**  Services in Angular let you share logic between different modules in your code.  In this case, we can create a single service, which we can call `loading` and that we can load into as many different controllers as we need.
@@ -155,7 +157,10 @@ angular.module('angularDataAccessApp')
   });
 ```
 
-So now we update a flag before we start loading things and flip it back once loading is complete.  In our controller, if we call `loading.isLoading('SFStreetNames')`, we'll get the status we're looking for.  We can wire that up to an ng-show in our view, and boom, we've got a loading indicator.
+So now we update a flag saying "this field is loading!" (`true`) before we start loading things and flip it back to "this field is NOT loading!" (`false`) once loading is complete.  In our controller, if we call `loading.isLoading('SFStreetNames')`, we'll get the status we're looking for.  We can wire that up to an `ng-show` in our view, and boom, we've got a loading indicator.
+
+Note that we're wrapping our loading check into another function in our controller so that we are ensured that we're pointing to a *reference* to our data rather than just evaluating once to a primitive value.  
+
 
 Controller:
 `app/scripts/controllers/better-example.js`
@@ -194,8 +199,12 @@ And view:
 </p>
 ```
 
+Alright!  Our loading service is now almost fulfilling its roles:  it's faithfully fetching data and it's keeping a ledger of loading statuses--now we just need to manage getting that data the rest of the way back to our controller(s).  Time to add another player.
+
+
+
+
 ###Building a `data` service to store our data
 
-
-We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage, so I'm going to spin up another service, `data`.  I'll run `yo angular:factory data` and then dependency-inject `data` into our `loading` service.  `data` will be our data storage container, while `loading` is the workhorse that runs and fetches the data as well as keeping track of loading status.
+We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage--there are times we may want to kick off loading data without immediately accessing it, and there are times when we won't need to load data asynchronously if we've already stored it once.  Since these are distinct purposes, I'm going to spin up another service, `data`.  I'll run `yo angular:factory data` and then dependency-inject `data` into our `loading` service.  `data` will be our data storage container, while `loading` is the workhorse that runs and fetches the data as well as keeping track of loading status.
 
