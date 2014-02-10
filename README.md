@@ -48,6 +48,10 @@ And the corresponding view:
 
 Does that look familiar?  This approach works on the quick, but it sure doesn't scale.  What about when you need to use that data in a different controller?  What about if you need to refactor your data sources to use different URIs or to follow a different schema?  As your application grows, this gets messy, and 'messy' isn't conducive to building quality software.  We need to organize this better.  Fortunately, AngularJS has tools we can leverage to this end.
 
+
+Building a `loading` service to fetch and track our data
+--------------------------------------------------------
+
 Enter **Angular services.**  Services in Angular let you share logic between different modules in your code.  In this case, we can create a single service, which we can call `loading` and that we can load into as many different controllers as we need.
 
 I'm using Yeoman here (which is amazing,) so to create my loading service I'm just going to run `yo angular:factory loading` at the command-line and Yeoman will create my boiler-plate file for me, as well as load it into index.html.  If you haven't set up Yeoman, you can just create the file manually and include the script in index.html yourself.
@@ -102,8 +106,75 @@ angular.module('angularDataAccessApp')
   });
 ```
 
+So if we call `loading.loadSFStreetNames()` from our controller, we're going to hit this function and make the async request--but since we can't work directly with that controller's scope anymore, we need to have a way to bring that data back to our controller.  We'll get to that in a second.  Let's handle the loading indicators first, while we're here.
 
-So if we call `loading.loadSFStreetNames()` from our controller, we're going to hit this function and make the async request, but we need to have a way to bring that data back to our controller.
+Our UI needs to know about the loading status of this request, so that we can show the users some sort of loading progress bar or loading text or apology or whatever it is you want to show them.  The only place that knows about the status of this async request is this service itself, so we're going to need to create a way to pass that status on back to the controller.  Let's build out a few methods!
+
+```
+angular.module('angularDataAccessApp')
+  .factory('loading', function (data) {
+```
+```javascript
+    //private hash for keeping track of loading values (true/false)
+    //for a given key
+    var _loadingStatus = {};
+```
+```
+    var loading = {
+```
+```javascript
+      //accessor/mutator methods for the loading hash
+      setLoading: function(field, value){
+        _loadingStatus[field] = value;
+      },
+      isLoading: function(field){
+        return _loadingStatus[field];
+      },
+```
+```
+      loadSFStreetNames: function(){
+        var uri = 'http://data.sfgov.org/resource/6d9h-4u5v.json'
+
+        var success = function(data, status, headers, config){
+          //We can't access scope directly anymore
+          //  $scope.streetNames = data;
+          //  $scope.streetNamesLoading = false;
+
+          //TODO:  We need to do something with this data!
+```
+```javascript
+          loading.setLoading('SFStreetNames', false);
+```
+```
+        };
+
+        var error = function(data, status, headers, config){
+          //TODO:  write some error-handling logic, maybe? 
+        };
+```
+```javascript
+        loading.setLoading('SFStreetNames', true);
+```
+```
+        $http.get(uri)
+          .success(success)
+          .error(error)
+      }
+    };
+
+    return loading;
+  });
+```
+
+
+
+Building a `data` service to store our data
+-------------------------------------------
+
+
+
+
+
 
 We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage, so I'm going to spin up another service, `data`.  I'll run `yo angular:factory data` and then dependency-inject `data` into our `loading` service.  `data` will be our data storage container, while `loading` is the workhorse that runs and fetches the data as well as keeping track of loading status.
 
