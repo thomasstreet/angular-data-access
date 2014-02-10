@@ -110,28 +110,25 @@ So if we call `loading.loadSFStreetNames()` from our controller, we're going to 
 
 Our UI needs to know about the loading status of this request, so that we can show the users some sort of loading progress bar or loading text or apology or whatever it is you want to show them.  The only place that knows about the status of this async request is this service itself, so we're going to need to create a way to pass that status on back to the controller.  Let's build out a few methods!
 
-```
+```diff
 angular.module('angularDataAccessApp')
   .factory('loading', function (data) {
-```
-```javascript
-    //private hash for keeping track of loading values (true/false)
-    //for a given key
-    var _loadingStatus = {};
-```
-```
+
++    //private hash for keeping track of loading values (true/false)
++    //for a given key
++    var _loadingStatus = {};
+
     var loading = {
-```
-```javascript
-      //accessor/mutator methods for the loading hash
-      setLoading: function(field, value){
-        _loadingStatus[field] = value;
-      },
-      isLoading: function(field){
-        return _loadingStatus[field];
-      },
-```
-```
+
++      //accessor/mutator methods for the loading hash
++      setLoading: function(field, value){
++       _loadingStatus[field] = value;
++      },
++      isLoading: function(field){
++        return _loadingStatus[field];
++      },
+
+
       loadSFStreetNames: function(){
         var uri = 'http://data.sfgov.org/resource/6d9h-4u5v.json'
 
@@ -141,21 +138,14 @@ angular.module('angularDataAccessApp')
           //  $scope.streetNamesLoading = false;
 
           //TODO:  We need to do something with this data!
-```
-```javascript
-          loading.setLoading('SFStreetNames', false);
-```
-```
++          loading.setLoading('SFStreetNames', false);
         };
 
         var error = function(data, status, headers, config){
           //TODO:  write some error-handling logic, maybe? 
         };
-```
-```javascript
-        loading.setLoading('SFStreetNames', true);
-```
-```
+
++        loading.setLoading('SFStreetNames', true);
         $http.get(uri)
           .success(success)
           .error(error)
