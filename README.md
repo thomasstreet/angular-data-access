@@ -114,19 +114,19 @@ Our UI needs to know about the loading status of this request, so that we can sh
 angular.module('angularDataAccessApp')
   .factory('loading', function (data) {
 
-+    //private hash for keeping track of loading values (true/false)
-+    //for a given key
-+    var _loadingStatus = {};
++   //private hash for keeping track of loading values (true/false)
++   //for a given key
++   var _loadingStatus = {};
 
     var loading = {
 
-+      //accessor/mutator methods for the loading hash
-+      setLoading: function(field, value){
-+       _loadingStatus[field] = value;
-+      },
-+      isLoading: function(field){
-+        return _loadingStatus[field];
-+      },
++     //accessor/mutator methods for the loading hash
++     setLoading: function(field, value){
++      _loadingStatus[field] = value;
++     },
++     isLoading: function(field){
++       return _loadingStatus[field];
++     },
 
 
       loadSFStreetNames: function(){
@@ -138,14 +138,14 @@ angular.module('angularDataAccessApp')
           //  $scope.streetNamesLoading = false;
 
           //TODO:  We need to do something with this data!
-+          loading.setLoading('SFStreetNames', false);
++         loading.setLoading('SFStreetNames', false);
         };
 
         var error = function(data, status, headers, config){
           //TODO:  write some error-handling logic, maybe? 
         };
 
-+        loading.setLoading('SFStreetNames', true);
++       loading.setLoading('SFStreetNames', true);
         $http.get(uri)
           .success(success)
           .error(error)
