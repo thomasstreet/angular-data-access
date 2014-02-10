@@ -5,8 +5,9 @@ While building an AngularJS app with any sort of server access, you have probabl
 
 >  "Oh, I need to get this data from an HTTP API, so let me drop in an `$http.get` right here in my controller, write up a callback that binds the data to a variable in my `$scope` object, maybe wire up a variable to use as a loading indicator, and boom--my UI is updated and I'm happy with my life.  Oh, and I ~~probably won't~~ might write some error-handling logic for this at some point."
 
-Or more concretely, here's some code for a controller doing exactly that: (`app/scripts/controllers/bad-example.js`)
+Or more concretely, here's some code for a controller doing exactly that: 
 
+`app/scripts/controllers/bad-example.js`
 ```javascript
 angular.module('angularDataAccessApp')
   .controller('BadExampleCtrl', function ($scope, $http) {
@@ -28,8 +29,9 @@ angular.module('angularDataAccessApp')
   });
 ```
 
-And the corresponding view: (`app/views/bad-example.html`)
+And the corresponding view: 
 
+`app/views/bad-example.html`
 ```html
 <h2>San Francisco Street Names</h2>
 <ul>
@@ -52,6 +54,8 @@ I'm using Yeoman here (which is amazing,) so to create my loading service I'm ju
 
 We can now include this "loading" service by dependency-injecting it into our controller (that is, include "loading" as one of the parameters in the controller declaration)
 
+
+Starting out `app/scripts/controllers/better-example.js`
 ```javascript
 angular.module('angularDataAccessApp')
   //Dependency-inject the 'loading' service here
@@ -67,6 +71,7 @@ Now what are we going to make loading do, exactly?  There are two roles I'd like
 
 Let's start with #1.  Let's load the data with a variant on the code we had in our bad-example controller.  I'll add a "loadSFStreetNames" function to the loading service and plug in pretty much the same logic.  We still have to do something with that data once we have it, though.
 
+`app/scripts/services/loading.js`
 ```javascript
 angular.module('angularDataAccessApp')
   .factory('loading', function () {
