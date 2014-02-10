@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularDataAccessApp')
-  .factory('loading', function (data) {
+  .factory('loading', function (data, $http) {
 
     //private hash for keeping track of loading values (true/false)
     //for a given key

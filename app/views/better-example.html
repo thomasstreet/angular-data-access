@@ -1,1 +1,10 @@
-<p>This is the better-example view.</p>
+<h2>San Francisco Street Names</h2>
+<ul>
+  <li ng-repeat="street in streetNames"
+      ng-show="!streetNamesLoading()" >
+    {{street["fullstreetname"]}}
+  </li>
+</ul>
+<p ng-show="streetNamesLoading()">
+  Street names are loading.
+</p>

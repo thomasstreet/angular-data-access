@@ -49,8 +49,7 @@ And the corresponding view:
 Does that look familiar?  This approach works on the quick, but it sure doesn't scale.  What about when you need to use that data in a different controller?  What about if you need to refactor your data sources to use different URIs or to follow a different schema?  As your application grows, this gets messy, and 'messy' isn't conducive to building quality software.  We need to organize this better.  Fortunately, AngularJS has tools we can leverage to this end.
 
 
-Building a `loading` service to fetch and track our data
---------------------------------------------------------
+###Building a `loading` service to fetch and track our data
 
 Enter **Angular services.**  Services in Angular let you share logic between different modules in your code.  In this case, we can create a single service, which we can call `loading` and that we can load into as many different controllers as we need.
 
@@ -73,12 +72,12 @@ Now what are we going to make loading do, exactly?  There are two roles I'd like
  1. Primarily, load data asynchronously and do something sane with it (our goal again is nice, clean organization.)
  2. Secondarily, give us access to loading indicators so we can update our UI consistently
 
-Let's start with #1.  Let's load the data with a variant on the code we had in our bad-example controller.  I'll add a "loadSFStreetNames" function to the loading service and plug in pretty much the same logic.  We still have to do something with that data once we have it, though.
+Let's start with #1.  Let's load the data with a variant on the code we had in our bad-example controller.  I'll add a `loadSFStreetNames` function to the loading service and plug in pretty much the same logic.  We still have to do something with that data once we have it, though.
 
 `app/scripts/services/loading.js`
 ```javascript
 angular.module('angularDataAccessApp')
-  .factory('loading', function () {
+  .factory('loading', function ($http) {
 
     var loading = {
       loadSFStreetNames: function(){
@@ -112,7 +111,7 @@ Our UI needs to know about the loading status of this request, so that we can sh
 
 ```diff
 angular.module('angularDataAccessApp')
-  .factory('loading', function (data) {
+  .factory('loading', function ($http) {
 
 +   //private hash for keeping track of loading values (true/false)
 +   //for a given key
@@ -156,14 +155,46 @@ angular.module('angularDataAccessApp')
   });
 ```
 
+So now we update a flag before we start loading things and flip it back once loading is complete.  In our controller, if we call `loading.isLoading('SFStreetNames')`, we'll get the status we're looking for.  We can wire that up to an ng-show in our view, and boom, we've got a loading indicator.
 
+Controller:
+`app/scripts/controllers/better-example.js`
+```javascript
+angular.module('angularDataAccessApp')
+  .controller('BetterExampleCtrl', function ($scope, loading) {
 
-Building a `data` service to store our data
--------------------------------------------
+    //Still need to pull this back from our
+    //loading service somehow
+    $scope.streetNames = [];
+    
+    //Wrap a call to the loading function in a scope-level
+    //function that's accessible to our view
+    $scope.streetNamesLoading = function(){
+      return loading.isLoading('SFStreetNames');
+    };
 
+    //Kick off that loading call in our loading service
+    loading.loadSFStreetNames();
 
+  });
+```
 
+And view:
+`app/views/better-example.html`
+```html
+<h2>San Francisco Street Names</h2>
+<ul>
+  <li ng-repeat="street in streetNames"
+      ng-show="!streetNamesLoading()" >
+    {{street["fullstreetname"]}}
+  </li>
+</ul>
+<p ng-show="streetNamesLoading()">
+  Street names are loading.
+</p>
+```
 
+###Building a `data` service to store our data
 
 
 We could store the data in our `loading` service, but it feels cleaner to me to separate the concerns of loading and storage, so I'm going to spin up another service, `data`.  I'll run `yo angular:factory data` and then dependency-inject `data` into our `loading` service.  `data` will be our data storage container, while `loading` is the workhorse that runs and fetches the data as well as keeping track of loading status.
