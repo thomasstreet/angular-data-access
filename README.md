@@ -1,6 +1,17 @@
 Organizing Data Access in AngularJS
 ===================================
 
+##What's happening here?
+
+This article will demonstrate (by building!) a pattern for an AngularJS application that encourages clean separation of concerns between data access, storage, and presentation.  For a reader familiar with MVC or *n*-tier architectural patterns, the concepts in this article should look familiar.
+
+Since Angular doesn't quite fit neatly into either of those molds, though, the pattern demonstrated here takes some of the successful concepts from both architectural styles and brings them to work in Angular.  The result is a highly organized, time-saving, easily refactorable, and scalable pattern for managing data access in AngularJS.
+
+
+
+
+##The problem
+
 While building an AngularJS app with any sort of server access, you have probably leveraged asynchronous requests and callbacks throughout your code.  For me, the approach has often been:
 
 >  "Oh, I need to get this data from an HTTP API, so let me drop in an `$http.get` right here in my controller, write up a callback that binds the data to a variable in my `$scope` object, maybe wire up a variable to use as a loading indicator, and boom--my UI is updated and I'm happy with my life.  Oh, and I ~~probably won't~~ might write some error-handling logic for this at some point."
