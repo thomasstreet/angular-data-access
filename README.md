@@ -70,6 +70,8 @@ Enter **Angular services.**  Services in Angular let you share logic between dif
 
 I'm using Yeoman here (which is amazing,) so to create my loading service I'm just going to run `yo angular:factory loading` at the command-line and Yeoman will create my boiler-plate file for me, as well as load it into index.html.  If you haven't set up Yeoman, you can just create the file manually and include the script in index.html yourself.
 
+*Note that I'm using the word 'service' interchangably with 'factory' here.  While a distinction exists between Angular's services, providers, and factories, they can all be used for the same main purpose, and it seems that 'service' is the common way to refer to the lot of them conceptually*
+
 We can now include this "loading" service by dependency-injecting it into our controller (that is, include "loading" as one of the parameters in the controller declaration)
 
 
